@@ -21,6 +21,10 @@ jobs:
         with:
           node-version: 18
 
+      - name: Navigate to project directory
+        working-directory: ./frontend # 確保修改為正確的子目錄
+        run: pwd
+
       - name: Install dependencies
         run: npm install
 
