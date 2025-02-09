@@ -13,26 +13,38 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # 檢出專案代碼
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      # 設定 Node.js 環境
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: 18
 
+      # 切換到含有 package.json 的目錄（如果在子目錄中）
+      - name: Navigate to project directory
+        working-directory: ./frontend # 確保修改為正確的子目錄
+        run: pwd
+
+      # 安裝相依套件
       - name: Install dependencies
+        working-directory: ./frontend
         run: npm install
 
+      # 執行單元測試並生成覆蓋率報告
       - name: Run Unit Tests and Generate Coverage
+        working-directory: ./frontend
         run: npm test -- --coverage --watchAll=false
 
+      # 上傳覆蓋率報告到 SonarCloud
       - name: Upload Coverage to SonarCloud
-        uses: sonarsource/sonarqube-scan-action@master
+        uses: sonarsource/sonarqube-scan-action@v1.4
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         with:
-          projectBaseDir: .
+          projectBaseDir: ./frontend
           args: >
             -Dsonar.projectKey=${{ secrets.SONAR_PROJECT_KEY }}
             -Dsonar.organization=Shadow181013
