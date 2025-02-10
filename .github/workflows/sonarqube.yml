@@ -21,11 +21,17 @@ jobs:
         with:
           node-version: 18
 
+      - name: Setup Java 17 # 🔹 加入這個步驟
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
       - name: Verify project structure
         run: ls -la && ls -la frontend # 確保 frontend 目錄存在
 
       - name: Install dependencies
-        working-directory: ./frontend # 確保 npm install 在 frontend 目錄執行
+        working-directory: ./frontend
         run: npm install
 
       - name: Run Unit Tests and Generate Coverage
@@ -38,7 +44,7 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
         with:
-          projectBaseDir: ./frontend # 修正 SonarQube 掃描範圍
+          projectBaseDir: ./frontend
           args: >
             -Dsonar.projectKey=${{ secrets.SONAR_PROJECT_KEY }}
             -Dsonar.organization=Shadow181013
