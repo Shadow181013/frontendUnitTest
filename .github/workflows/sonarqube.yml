@@ -39,7 +39,7 @@ jobs:
         run: npm test -- --coverage --watchAll=false
 
       - name: Upload Coverage to SonarCloud
-        uses: sonarsource/sonarqube-scan-action@master 
+        uses: sonarsource/sonarqube-scan-action@master
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
@@ -47,7 +47,7 @@ jobs:
           projectBaseDir: ./frontend
           args: >
             -Dsonar.projectKey=${{ secrets.SONAR_PROJECT_KEY }}
-            -Dsonar.organization=Shadow181013
+            -Dsonar.organization=shadow181013
             -Dsonar.sources=src
             -Dsonar.tests=src
             -Dsonar.test.inclusions=src/**/*.test.js
