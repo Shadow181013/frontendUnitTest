@@ -67,3 +67,20 @@ describe('Counter Component', () => {
     expect(button).toHaveAccessibleName();
   });
 });
+
+describe('Counter Component', () => {
+  // 基本渲染測試
+  test('renders initial counter value and button', () => {
+    render(<Counter />);
+    expect(screen.getByText(/Counter: 0/i)).toBeInTheDocument();
+    expect(screen.getByRole('button')).toBeInTheDocument();
+  });
+
+  // 功能測試
+  test('increases counter value when button is clicked', async () => {
+    render(<Counter />);
+    const button = screen.getByRole('button');
+    await userEvent.click(button);
+    expect(screen.getByText(/Counter: 1/i)).toBeInTheDocument();
+  });
+});
