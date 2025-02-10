@@ -21,14 +21,15 @@ jobs:
         with:
           node-version: 18
 
-      - name: Navigate to project directory
-        working-directory: ./frontend # 確保修改為正確的子目錄
-        run: pwd
+      - name: Verify project structure
+        run: ls -la && ls -la frontend # 確保 frontend 目錄存在
 
       - name: Install dependencies
+        working-directory: ./frontend # 確保 npm install 在 frontend 目錄執行
         run: npm install
 
       - name: Run Unit Tests and Generate Coverage
+        working-directory: ./frontend
         run: npm test -- --coverage --watchAll=false
 
       - name: Upload Coverage to SonarCloud
@@ -37,7 +38,7 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
         with:
-          projectBaseDir: .
+          projectBaseDir: ./frontend # 修正 SonarQube 掃描範圍
           args: >
             -Dsonar.projectKey=${{ secrets.SONAR_PROJECT_KEY }}
             -Dsonar.organization=Shadow181013
