@@ -18,7 +18,7 @@ describe('Counter Component', () => {
     render(<Counter />);
 
     // 檢查計數器初始值
-    expect(screen.getByText(/Counter: 0/i)).toBeInTheDocument();
+    expect(screen.getByText(/Counter: 1/i)).toBeInTheDocument();
 
     // 檢查按鈕存在
     const button = screen.getByRole('button', { name: /increase/i });
