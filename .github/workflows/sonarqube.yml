@@ -1,7 +1,8 @@
+# .github/workflows/sonarqube.yml
 name: SonarQube Analysis
 
 on:
-  workflow_call: # This allows the workflow to be called by other workflows
+  workflow_call:
 
 jobs:
   sonarqube:
@@ -16,11 +17,25 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
+      # 確保有 coverage 報告
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Install dependencies
+        working-directory: ./frontend
+        run: npm install
+
+      - name: Run Tests with Coverage
+        working-directory: ./frontend
+        run: npm test -- --coverage --watchAll=false
+
       - name: Upload Coverage to SonarCloud
         uses: sonarsource/sonarqube-scan-action@master
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+          SONAR_HOST_URL: "https://sonarcloud.io" # 明確指定 URL
         with:
           projectBaseDir: ./frontend
           args: >
@@ -30,3 +45,4 @@ jobs:
             -Dsonar.tests=src
             -Dsonar.test.inclusions=src/**/*.test.js
             -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info
+            -Dsonar.host.url=https://sonarcloud.io # 額外確保 URL 正確
