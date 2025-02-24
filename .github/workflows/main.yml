@@ -9,11 +9,9 @@ on:
       - main
 
 jobs:
-  trigger-workflows:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+  unit-test:
+    uses: ./.github/workflows/unit-test.yml  # 呼叫單元測試工作流程
 
-      - name: Verify project structure
-        run: ls -la && ls -la frontend
+  sonarqube:
+    needs: unit-test  # 等待單元測試完成後才執行
+    uses: ./.github/workflows/sonarqube.yml  # 呼叫 SonarQube 工作流程
