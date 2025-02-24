@@ -1,0 +1,24 @@
+name: React Unit Test
+
+on:
+  workflow_call: # This allows the workflow to be called by other workflows
+
+jobs:
+  unit-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Install dependencies
+        working-directory: ./frontend
+        run: npm install
+
+      - name: Run Unit Tests and Generate Coverage
+        working-directory: ./frontend
+        run: npm test -- --coverage --watchAll=false

@@ -1,42 +1,20 @@
-name: React Unit Test & SonarQube Analysis
+name: SonarQube Analysis
 
 on:
-  push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
+  workflow_call: # This allows the workflow to be called by other workflows
 
 jobs:
-  test-and-analyze:
+  sonarqube:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: 18
-
-      - name: Setup Java 17 # 🔹 加入這個步驟
+      - name: Setup Java 17
         uses: actions/setup-java@v3
         with:
           distribution: 'temurin'
           java-version: '17'
-
-      - name: Verify project structure
-        run: ls -la && ls -la frontend # 確保 frontend 目錄存在
-
-      - name: Install dependencies
-        working-directory: ./frontend
-        run: npm install
-
-      - name: Run Unit Tests and Generate Coverage
-        working-directory: ./frontend
-        run: npm test -- --coverage --watchAll=false
 
       - name: Upload Coverage to SonarCloud
         uses: sonarsource/sonarqube-scan-action@master
